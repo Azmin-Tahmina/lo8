@@ -19,7 +19,35 @@
                 $("#btnUpdateAll").on("click", function() {
                     $.getJSON("data/allinstructors.json", processAllInstructors);
                 });
+
+                $("#btnUpdateAllPractice").on("click",function (){
+                    $.getJSON("data/allinstructors.json", processAllInstructorsPractice);
+                })
             });
+
+            function processAllInstructorsPractice(jsonObject,status)
+            {
+                if(status === "success")
+                {
+                    let names = []
+                    let offices = []
+                    let phones = "";
+                    for (const eachItem of jsonObject)
+                    {
+                        names.push(eachItem.name)
+                        offices.push(eachItem.office)
+                        phones += eachItem.phone +","
+                    }
+                    //window.alert(outputString)
+                    document.getElementById("name").innerText = names.join(",")
+                    document.getElementById("office").innerText = offices.join(",")
+                    document.getElementById("phone").innerText = phones.slice(0,-2)
+                }
+                else
+                {
+                    window.alert("There was a problem: " + status);
+                }
+            }
 
             function processInstructor(jsonObject, status) {
                 if (status === "success") {
@@ -67,6 +95,9 @@
                 Use jQuery To Update Instructor Information
             </button>
             <button type="button" id="btnUpdateAll">
+                Update All Instructors
+            </button>
+            <button type="button" id="btnUpdateAllPractice">
                 Update All Instructors
             </button>
         </p>

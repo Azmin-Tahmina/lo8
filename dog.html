@@ -6,31 +6,55 @@
     <script src="scripts/cookieutils.js"></script>
     <script>
         window.onload = function() {
-            let url = readCookie("url");
-            if (url !== undefined) {
-                document.getElementById("dogInfo").innerText = url;
+            // let url = readCookie("url");
+            // if (url !== undefined) {
+            //     document.getElementById("dogInfo").innerText = url;
+            // }
+            //
+            // document.getElementById("btnGetDog").onclick = function() {
+            //     fetch("https://random.dog/woof.json").then(function(response) {
+            //        if (response.ok) {
+            //            return response.json();
+            //        }
+            //        throw new Error("Network response was not OK: " + response.status);
+            //     }).then(function(dog) {
+            //        document.getElementById("dogInfo").innerText = dog.url;
+            //        if (dog.url.endsWith(".mp4") || dog.url.endsWith(".webm")) {
+            //            document.getElementById("dogImage").innerHTML =
+            //                "<video src='" + dog.url + "' controls></video>";
+            //        } else {
+            //            document.getElementById("dogImage").innerHTML =
+            //                "<img src='" + dog.url + "' alt='Random dog' />";
+            //        }
+            //         setCookie("url", dog.url, 7);
+            //     }).catch(function(error) {
+            //         console.log("Problem with the fetch operation: " + error.message);
+            //     });
+            // };
+            document.getElementById("btnGetDog").onclick = function(){
+                fetch("https://random.dog/woof.json").then(function(response){
+                    window.alert(response.ok)
+                    if(response.ok){
+                        return response.json();
+                    }
+                    throw new Error("Network response response was "+ response.status)
+                }).then(function (dogObject){
+                    document.getElementById("dogInfo").innerHTML = dogObject.url
+                    if(dogObject.url.endsWith(".mp4") ||dogObject.url.endsWith(".webm") ){
+                        document.getElementById("dogImage").innerHTML =
+                            "<video src='"+ dogObject.url+"'controls></video>"
+                    }
+                    else{
+                        document.getElementById("dogImage").innerHTML =
+                            "<img src='"+ dogObject.url+"'alt='Random Dog'/>"
+                    }
+                    setCookie("dogurl",dogObject.url,7)
+                }).catch(function(error){
+                    console.log("Problem with the fetch operation: "+ error.message)
+                })
             }
 
-            document.getElementById("btnGetDog").onclick = function() {
-                fetch("https://random.dog/woof.json").then(function(response) {
-                   if (response.ok) {
-                       return response.json();
-                   }
-                   throw new Error("Network response was not OK: " + response.status);
-                }).then(function(dog) {
-                   document.getElementById("dogInfo").innerText = dog.url;
-                   if (dog.url.endsWith(".mp4") || dog.url.endsWith(".webm")) {
-                       document.getElementById("dogImage").innerHTML =
-                           "<video src='" + dog.url + "' controls></video>";
-                   } else {
-                       document.getElementById("dogImage").innerHTML =
-                           "<img src='" + dog.url + "' alt='Random dog' />";
-                   }
-                    setCookie("url", dog.url, 7);
-                }).catch(function(error) {
-                    console.log("Problem with the fetch operation: " + error.message);
-                });
-            };
+
         };
     </script>
 </head>

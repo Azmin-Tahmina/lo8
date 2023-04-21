@@ -18,6 +18,133 @@
             <button type="button" id="btnUpdateFetch">
                 Use Fetch To Update Instructor Information
             </button>
+            <button type="button" id="btnUpdateAll">
+                Update All Instructors
+            </button>
+
         </p>
     </body>
+    <script>
+        "use strict"
+
+        window.onload = function(){
+            document.getElementById("btnUpdate").onclick = function(){
+                //document.getElementById("name").innerText = "Michael Grzesina";
+                document.getElementById("name").innerText = "Ding George";
+                document.getElementById("office").innerText = "Room 240A.5";
+                document.getElementById("phone").innerText = "306-659-4231";
+            }
+
+
+            // Create an XMLHttpRequest object
+            // Configure the object, telling it what URL to fetch and how to fetch it (a GET or POST request)
+            // Set up an event handler on the object to handle the response
+            // Send off the request
+            // Go off and do something else until the event handler is executed when the response is received
+
+
+            // var xhttp = new XMLHttpRequest();
+            // xhttp.onreadystatechange = function() {
+            //     if (this.readyState == 4 && this.status == 200) {
+            //         // Typical action to be performed when the document is ready:
+            //         document.getElementById("demo").innerHTML = xhttp.responseText;
+            //     }
+            // };
+            // xhttp.open("GET", "data/oneinstructor.json", true);
+            // xhttp.send();
+
+            // document.getElementById("btnUpdateFetch").onclick = function(){
+            //    fetch("data/oneinstructor.json").then(function(response){
+            //         window.alert(response.ok);
+            //    })
+            // }
+
+            // https://www.w3schools.com/js/js_ajax_http.asp
+
+            document.getElementById("btnUpdateFetch").onclick = function(){
+                fetch("data/oneinstructor.json").then(function(response){
+                    //window.alert(response.ok);
+                    if(response.ok)
+                    {
+                        return response.json();
+                    }
+                    throw new Error("Network response response was "+ response.status)
+                }).then(function(jsonObject){
+                    let outputString;
+                    outputString = "Name: "+jsonObject.name+ " Office: "+ jsonObject.office + " Phone: "+ jsonObject.phone+ " Available: "+jsonObject.available;
+                    window.alert(outputString);
+                    document.getElementById("name").innerText = jsonObject.name;
+                    document.getElementById("office").innerText = jsonObject.office;
+                    document.getElementById("phone").innerText = jsonObject.phone;
+                }).catch(function(error){
+                    console.log("Problem with the fetch operation: "+ error.message)
+                })
+
+                // fetch("data/oneinstructor.json").then(function(response){
+                //     if(response.ok){
+                //         return response.json();
+                //     }
+                //     throw new Error("Network response response was "+ response.status)
+                // }).then(function (jsonObject){
+                //
+                // }).catch(function(error){
+                //     console.log("Problem with the fetch operation: "+ error.message)
+                // })
+            }
+
+            // document.getElementById("btnUpdateAll").onclick = function(){
+            //     fetch("data/allinstructors.json").then(function(response){
+            //         window.alert(response.ok);
+            //     })
+            // }
+
+            // document.getElementById("btnUpdateAll").onclick = function(){
+            //     fetch("data/allinstructors.json").then(function(response){
+            //         //window.alert(response.ok);
+            //         if(response.ok)
+            //         {
+            //             window.alert(response.ok + "Status of response "+ response.status);
+            //         }
+            //         else
+            //         {
+            //             throw new Error("Network response was not okay "+ response.status);
+            //         }
+            //     }).catch(function(error){
+            //         console.log("Problem with the fetch operation: "+ error.message)
+            //     });
+            // }
+
+            document.getElementById("btnUpdateAll").onclick = function(){
+                fetch("data/allinstructors.json").then(function(response){
+                    //window.alert(response.ok);
+                    if(response.ok)
+                    {
+                        //window.alert(response.ok + "Status of response "+ response.status);
+                        return response.json()
+                    }
+                    throw new Error("Network response was not okay "+ response.status);
+
+                }).then(function(jsonArray){
+                    let names = []
+                    let offices = []
+                    let phones = "";
+                    for (const eachItem of jsonArray)
+                    {
+                        names.push(eachItem.name)
+                        offices.push(eachItem.office)
+                        phones += eachItem.phone +","
+                    }
+                    //window.alert(outputString)
+                    document.getElementById("name").innerText = names.join(",")
+                    document.getElementById("office").innerText = offices.join(",")
+                    document.getElementById("phone").innerText = phones.slice(0,-2)
+                    //recommended practice - create select box based on jsonArray, create sum of the numbers
+                    // if it is included
+                }).catch(function(error){
+                    console.log("Problem with the fetch operation: "+ error.message)
+                });
+            }
+
+        }
+    </script>
 </html>
